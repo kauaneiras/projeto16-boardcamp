@@ -1,7 +1,7 @@
 import connection from "../database/database.js";
 import joi from "joi";
 
-export async function categoriesmiddleware(req, res) {
+export async function categoriesmiddleware(req, res, next) {
     const { name } = req.body;
     const schema = joi.object({
         name: joi.string().min(1).required(),
@@ -14,7 +14,7 @@ export async function categoriesmiddleware(req, res) {
     }
 
     const existName = await connection.query(`SELECT * FROM categories WHERE name = $1`, [name]);
-    if (existName.row[0]){
+    if ( existName.rowCount > 0){
         res.sendStatus(409).send("Name already exists");
         return;
     }

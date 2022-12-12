@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 
 import categoriesrouter from './routes/categories.router.js';
+import gamesrouter from './routes/games.router.js';
 
 
 dotenv.config();
@@ -15,6 +16,7 @@ app.get('/', (req, res) => {
 });
 
 app.use(categoriesrouter);
+app.use(gamesrouter);
 
 
 
