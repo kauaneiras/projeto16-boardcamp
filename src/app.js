@@ -1,25 +1,30 @@
+// import modules 
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
+// import routes
 import categoriesrouter from './routes/categories.router.js';
 import gamesrouter from './routes/games.router.js';
+import customersrouter from './routes/customers.route.js';
 
 
 dotenv.config();
+
+// app use the modules
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send('Hello World');
-});
+// test route to check if the server is running
+app.get('/', (req, res) => {res.send('Hello World');});
 
+// use the routes
 app.use(categoriesrouter);
 app.use(gamesrouter);
+app.use(customersrouter);
 
-
-
+// start the server
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
 console.log("____________________________________________________");
