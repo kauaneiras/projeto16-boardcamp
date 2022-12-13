@@ -7,6 +7,7 @@ import cors from 'cors';
 import categoriesrouter from './routes/categories.router.js';
 import gamesrouter from './routes/games.router.js';
 import customersrouter from './routes/customers.route.js';
+import rentalsrouter from './routes/rentals.route.js';
 
 
 dotenv.config();
@@ -23,6 +24,7 @@ app.get('/', (req, res) => {res.send('Hello World');});
 app.use(categoriesrouter);
 app.use(gamesrouter);
 app.use(customersrouter);
+app.use(rentalsrouter);
 
 // start the server
 const port = process.env.PORT || 4000;
