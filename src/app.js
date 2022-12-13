@@ -18,7 +18,7 @@ app.use(cors());
 app.use(express.json());
 
 // test route to check if the server is running
-app.get('/', (req, res) => {res.send('Hello World');});
+app.get('/', (req, res) => {res.send('Server is working');});
 
 // use the routes
 app.use(categoriesrouter);

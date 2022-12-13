@@ -4,9 +4,9 @@ import { customersmiddleware } from "../middlewares/customers.middleware.js";
 
 const customersrouter = express.Router();
 
-customersrouter.post('/costumers', customersmiddleware, postcustomerscontroller);
-customersrouter.put('/costumers/:id', customersmiddleware, putcustomerscontroller);
-customersrouter.get('/costumers', getallcustomerscontroller);
-customersrouter.get('/costumers/:id', getonecustomercontroller);
+customersrouter.post('/customers', customersmiddleware, postcustomerscontroller);
+customersrouter.put('/customers/:id', customersmiddleware, putcustomerscontroller);
+customersrouter.get('/customers', getallcustomerscontroller);
+customersrouter.get('/customers/:id', getonecustomercontroller);
 
 export default customersrouter;
