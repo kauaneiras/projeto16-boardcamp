@@ -9,13 +9,13 @@ export async function categoriesmiddleware(req, res, next) {
 
     const validation = schema.validate(req.body);
     if (validation.error) {
-        res.sendStatus(400).send(validation.error.details[0].message);
+        res.status(400).send(validation.error.details[0].message);
         return;
     }
 
     const existName = await connection.query(`SELECT * FROM categories WHERE name = $1`, [name]);
     if ( existName.rowCount > 0){
-        res.sendStatus(409).send("Name already exists");
+        res.status(409).send("Name already exists");
         return;
     }
 

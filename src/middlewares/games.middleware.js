@@ -3,6 +3,7 @@ import joi from "joi";
 
 export async function gamesmiddleware(req, res, next) {
     const { name, image, stockTotal, categoryId, pricePerDay } = req.body;
+
     const schema = joi.object({
         name: joi.string().min(1).required(),
         image: joi.required(),
@@ -10,6 +11,11 @@ export async function gamesmiddleware(req, res, next) {
         pricePerDay: joi.number().min(1).required(),
         categoryId: joi.number().min(1).required()
     });
+
+    const validation = schema.validate(req.body);
+    if (validation === false) {
+        return res.status(400).send(validation.error.details[0].message);
+    }
 
     function isValidHttpUrl(string) {
         let url;
@@ -20,41 +26,21 @@ export async function gamesmiddleware(req, res, next) {
         }
         return url.protocol === "http:" || url.protocol === "https:";
       }
-
-
-    try{
-        const validation = schema.validate(req.body);
+        
         const existName = await connection.query(`SELECT * FROM games WHERE name = $1`, [name]);
-        const existCategoryId = await connection.query(`SELECT * FROM categories WHERE id = $1`, [categoryId]);
-        if (validation.error) {
-            res.sendStatus(400).send(validation.error.details[0].message);
-            return;
-        }
+
         if (!isValidHttpUrl(image)) {
-            res.sendStatus(400).send("Invalid image url");
-            return;
+            return res.status(400).send("Invalid image url");
         }
 
         if (stockTotal < 1 || pricePerDay < 1) {
-            res.sendStatus(400).send(" stockTotal and pricePerDay must be greater");
-            return;
+            return res.status(400).send(" stockTotal and pricePerDay must be greater");
         }
 
         if (existName.rowCount > 0) {
-            res.sendStatus(409).send("Name already exists");
-            return;
-        }
-        
-        if (existCategoryId.rowCount === 0) {
-            res.sendStatus(400).send("Category not found");
-            return;
+            return res.status(409).send("Name already exists");
         }
 
-        next();
-        console.log("Middleware passed")
-        
-    } catch (error) {
-        res.sendStatus(500).send(error.message);
-        return;
-    }    
+    next();
+    console.log("Middleware passed")
 }

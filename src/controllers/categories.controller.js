@@ -4,16 +4,16 @@ export async function postcategoriescontroller (req, res) {
     const { name } = req.body
     
     if (!name) {
-        res.sendStatus(404);
+        res.status(404).send("Name not found");
         return;
     }
 
     try {
         await connection.query(`INSERT INTO categories (name) VALUES ($1)`, [name]);
-        res.sendStatus(201);
+        res.status(201).send("Category created");
         return;
     } catch (error) {
-        res.sendStatus(500).send(error.message);
+        res.status(500).send(error.message);
         return;
     }
 }
@@ -24,7 +24,7 @@ export async function getcategoriescontroller (req, res) {
         res.send(result.rows);
         return;
     } catch (error) {
-        res.sendStatus(500).send(error.message);
+        res.status(500).send(error.message);
         return;
     }
 }

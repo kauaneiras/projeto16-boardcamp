@@ -1,16 +1,22 @@
 import connection  from "../database/database.js"
 
 export async function postgamescontroller(req, res){
+    
     const { name, image, stockTotal, caregoryId, pricePerDay } = req.body;
 
     try {
+        const existId = await connection.query(`SELECT * FROM categories WHERE id=$1;`, [caregoryId]);
+        if (existId.rowCount === 0) {
+            return res.status(404).send("Category not found");
+        }
+
         await connection.query(`
             INSERT INTO games (name, image, "stockTotal", "categoryId", "pricePerDay") VALUES ($1, $2, $3, $4, $5)`, [name, image, stockTotal, caregoryId, pricePerDay]);
-            res.sendStatus(201);
-            return;
+            return res.status(201).send("Game created");
+            
         } catch (error) {
-        res.status(500).send(error.message);
-        return;
+        return res.status(500).send(error.message);
+        
     }
 }
 
@@ -20,15 +26,13 @@ export async function getgamescontroller(req, res){
     try {
         if(!name){
             const result = await connection.query(`SELECT * FROM games`);
-            res.send(result.rows);
-            return;
+            return res.send(result.rows);
+            
         }
         const result = await connection.query(`SELECT * FROM games WHERE name ILIKE $1`, [name + '%']);
-        res.send(result.rows);
-        return;
+        return res.send(result.rows);
     }
     catch (error) {
-        res.status(500).send(error.message);
-        return;
+        return res.status(500).send(error.message);
     }
 }
